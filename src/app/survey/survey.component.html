@@ -1,0 +1,58 @@
+<mat-vertical-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="demographicFormGroup">
+    <form [formGroup]="demographicFormGroup">
+      <ng-template matStepLabel>Demographic Information</ng-template>
+      <mat-form-field>
+        <mat-label>Sex</mat-label>
+        <mat-select formControlName="sexCtrl">
+          <mat-option *ngFor="let option of sexOptions; index as index" [value]="index" required>{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>State</mat-label>
+        <mat-select formControlName="stateCtrl">
+          <mat-option *ngFor="let state of states; index as index" [value]="index" required>{{state}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="outfitFormGroup">
+    <form [formGroup]="outfitFormGroup">
+      <ng-template matStepLabel>Observe a Random Outfit</ng-template>
+      <div *ngFor="let key of randomOutfitKeys; index as index">
+        <h1>{{key}}</h1>
+        <img [src]="randomOutfit[key][0].src" alt="garment image"/>
+      </div>
+      <mat-form-field>
+        <mat-label>Rate the Random Outfit</mat-label>
+        <mat-select formControlName="randomRateCtrl" required>
+          <mat-option *ngFor="let number of ratingClass; index as index" [value]="number">{{number}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Previous</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="wardrobeFormGroup">
+    <form [formGroup]="wardrobeFormGroup">
+      <ng-template matStepLabel>Observe a Random Wardrobe</ng-template>
+      <!--<mat-form-field>-->
+        <!--<div *ngFor="let type in randomWardrobe;">-->
+          <!--<h2>{{type}}</h2>-->
+          <!--<div>-->
+            <!--<img *ngFor="let article of randomWardrobe[type]" [src]="article.src" alt="garment image"/>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</mat-form-field>-->
+      <div>
+        <button mat-button matStepperPrevious>Previous</button>
+        <button mat-button (click)="submit()">Submit</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-vertical-stepper>
