@@ -1,12 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 // Material
 import {
   MatButtonModule,
   MatCheckboxModule,
+  MatCardModule,
+  MatDividerModule,
+  MatRadioModule,
   MatStepperModule,
   MatSelectModule,
   MatFormFieldModule,
@@ -26,10 +30,14 @@ import { SurveyComponent } from './survey/survey.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatCardModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatOptionModule,
+    MatRadioModule,
     MatSelectModule,
     MatStepperModule,
     ReactiveFormsModule,

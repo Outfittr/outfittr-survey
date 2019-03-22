@@ -1,3 +1,11 @@
+
+<mat-card *ngIf="selectedOutfit()" class="outfittr-outfit">
+  <mat-card-header>
+    <mat-card-title>Current Created Outfit</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image [src]="submission.createdOutfit.Tops" alt="Top garment">
+  <img mat-card-image [src]="submission.createdOutfit.Bottoms" alt="Bottom garment">
+</mat-card>
 <mat-vertical-stepper [linear]="true" #stepper>
   <mat-step [stepControl]="demographicFormGroup">
     <form [formGroup]="demographicFormGroup">
@@ -26,12 +34,10 @@
         <h1>{{key}}</h1>
         <img [src]="randomOutfit[key][0].src" alt="garment image"/>
       </div>
-      <mat-form-field>
-        <mat-label>Rate the Random Outfit</mat-label>
-        <mat-select formControlName="randomRateCtrl" required>
-          <mat-option *ngFor="let number of ratingClass; index as index" [value]="number">{{number}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <h2>Rate the Random Outfit</h2>
+      <mat-radio-group formControlName="randomRateCtrl" required>
+        <mat-radio-button *ngFor="let number of ratingClass;" [value]="number">{{number}}</mat-radio-button>
+      </mat-radio-group>
       <div>
         <button mat-button matStepperPrevious>Previous</button>
         <button mat-button matStepperNext>Next</button>
@@ -41,14 +47,16 @@
   <mat-step [stepControl]="wardrobeFormGroup">
     <form [formGroup]="wardrobeFormGroup">
       <ng-template matStepLabel>Observe a Random Wardrobe</ng-template>
-      <!--<mat-form-field>-->
-        <!--<div *ngFor="let type in randomWardrobe;">-->
-          <!--<h2>{{type}}</h2>-->
-          <!--<div>-->
-            <!--<img *ngFor="let article of randomWardrobe[type]" [src]="article.src" alt="garment image"/>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</mat-form-field>-->
+      <div *ngFor="let type of randomWardrobeKeys;">
+        <h2>{{type}}</h2>
+        <div>
+          <img *ngFor="let article of randomWardrobe[type]; index as index" [ngClass]="{'outfittr-garment-image': true, 'selected': isSelected(index, type)}" [src]="article.src" [id]="type + index" (click)="selectArticle(index, type)" alt="garment image"/>
+        </div>
+      </div>
+      <h2>Rate your Outfit</h2>
+      <mat-radio-group formControlName="wardrobeRateCtrl">
+        <mat-radio-button *ngFor="let number of ratingClass;" [value]="number">{{number}}</mat-radio-button>
+      </mat-radio-group>
       <div>
         <button mat-button matStepperPrevious>Previous</button>
         <button mat-button (click)="submit()">Submit</button>
