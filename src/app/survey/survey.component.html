@@ -3,10 +3,34 @@
   <mat-card-header>
     <mat-card-title>Current Created Outfit</mat-card-title>
   </mat-card-header>
-  <img mat-card-image [src]="submission.createdOutfit.Tops" alt="Top garment">
-  <img mat-card-image [src]="submission.createdOutfit.Bottoms" alt="Bottom garment">
+  <img mat-card-image [src]="randomWardrobe.Tops[outfitSelected.Tops].src" alt="Top garment">
+  <img mat-card-image [src]="randomWardrobe.Bottoms[outfitSelected.Bottoms].src" alt="Bottom garment">
 </mat-card>
-<mat-vertical-stepper [linear]="true" #stepper>
+<div *ngIf="loading" class="outfittr-loading">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<mat-card *ngIf="!loading" class="outfittr-introduction">
+  <mat-card-header>
+    <mat-card-title>Before You Begin</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      Before you begin the survey, please read the following information carefully
+    </p>
+    <p>
+      A "formality value" is a whole number between 1 and 10 indicative of the formality of an occasion (where 1 is
+      very informal and 10 is exceptionally formal).
+    </p>
+    <p>
+      Assume when building and rating the outfits in the following
+      sections that it's a <b><u>{{temperatureFactors[submission.factors.temperature]}}</u></b>,
+      <b><u>{{weatherFactors[submission.factors.weather]}}</u></b>,
+      <b><u>{{seasonFactors[submission.factors.season]}}</u></b> day and that the outfits are to be worn on an occasion
+      with a formality value of <b><u>{{submission.factors.formality}}</u></b>
+    </p>
+  </mat-card-content>
+</mat-card>
+<mat-vertical-stepper *ngIf="!loading" [linear]="true" #stepper>
   <mat-step [stepControl]="demographicFormGroup">
     <form [formGroup]="demographicFormGroup">
       <ng-template matStepLabel>Demographic Information</ng-template>

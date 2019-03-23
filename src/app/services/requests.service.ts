@@ -11,33 +11,52 @@ export class RequestsService {
     private http: HttpClient
   ) { }
 
-  public getSurvey(): Observable<{}>{
+  public static getSurvey(): Observable<{}> {
     return of({
       randomOutfit: {
         Tops: [
-          {src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'}
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download',
+            filename: 'filename.pic'
+          }
         ],
         Bottoms: [
-          {src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'}
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download',
+            filename: 'bottomname.pic'
+          }
         ]
       },
       randomWardrobe: {
         Tops: [
-          {src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'},
-          {src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'}
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download',
+            filename: 'topname.pic'
+          },
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download',
+            filename: 'topname2.pic'
+          }
         ],
         Bottoms: [
-          {src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'},
-          {src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'}
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download',
+            filename: 'bottomname3.pic'
+          },
+          {
+            src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download',
+            filename: 'bottomname33.pic'
+          }
 
         ]
-      },
-      factors: {
-        weather: 1,
-        temperature: 1,
-        formality: 1,
-        season: 1
       }
+    });
+  }
+
+  public static sendSurvey(surveySubmission: any): Observable<{}> {
+    return of({
+      status: 'success',
+      sent: surveySubmission
     });
   }
 }

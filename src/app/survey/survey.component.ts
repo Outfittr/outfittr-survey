@@ -5,12 +5,19 @@ import { RequestsService } from '../services/requests.service';
 
 interface Garment {
   src: string;
-  name: string;
+  filename: string;
 }
 
 interface Wardrobe {
   Tops: Garment[];
   Bottoms: Garment[];
+}
+
+interface EnvironmentFactor {
+  weather: number;
+  temperature: number;
+  formality: number;
+  season: number;
 }
 
 @Component({
@@ -24,35 +31,38 @@ export class SurveyComponent implements OnInit {
   public wardrobeFormGroup: FormGroup;
 
   public sexOptions = ['male', 'female'];
-  public states = ['idaho', 'other'];
+  public states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+    'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+    'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+    'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+    'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri',
+    'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+    'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+    'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+    'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+    'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+  ];
   public ratingClass = [1, 2, 3, 4, 5];
+  public weatherFactors = ['sunny', 'cloudy', 'windy', 'rainy'];
+  public temperatureFactors = ['cold', 'hot', 'neutral'];
+  public seasonFactors = ['winter', 'spring', 'summer', 'fall'];
+  public loading = true;
 
-  public randomOutfit: Wardrobe = {
-    Tops: [
-      ({src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'}) as Garment
-    ],
-    Bottoms: [
-      ({src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'}) as Garment
-    ]
-  };
-  public randomWardrobe: Wardrobe  = {
-    Tops: [
-      ({src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'}) as Garment,
-      ({src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'}) as Garment
-    ],
-    Bottoms: [
-      ({src: 'https://drive.google.com/uc?authuser=0&id=1OerxKsVdxyMWbWsn5aEwFwsjpn0eIevF&export=download'}) as Garment,
-      ({src: 'https://drive.google.com/uc?authuser=0&id=104nclYRM9yCxWWeAtXR9ynv9bB2UTF16&export=download'}) as Garment
+  public randomOutfit: Wardrobe;
+  public randomWardrobe: Wardrobe;
+  public randomOutfitKeys;
+  public randomWardrobeKeys;
 
-    ]
-  };
-  public randomOutfitKeys = Object.keys(this.randomOutfit);
-  public randomWardrobeKeys = Object.keys(this.randomWardrobe);
-
+  public outfitSelected = {};
   public submission = {
     sex: -1,
     state: -1,
-    factors: {},
+    factors: {
+      formality: Math.floor(Math.random() * 11),
+      weather: Math.floor(Math.random() * (this.weatherFactors.length + 1)),
+      temperature: Math.floor(Math.random() * (this.temperatureFactors.length + 1)),
+      season: Math.floor(Math.random() * (this.seasonFactors.length + 1))
+    },
     createdOutfit: {},
     createRating: -1,
     randomOutfit: {},
@@ -60,8 +70,7 @@ export class SurveyComponent implements OnInit {
   };
 
   constructor(
-    private formBuilder: FormBuilder,
-    private requests: RequestsService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
@@ -75,8 +84,12 @@ export class SurveyComponent implements OnInit {
     this.wardrobeFormGroup = this.formBuilder.group({
       wardrobeRateCtrl: ['', Validators.required]
     });
-    this.requests.getSurvey().subscribe((data) => {
-      console.log(data);
+    RequestsService.getSurvey().subscribe((data: any) => {
+      this.randomOutfit = data.randomOutfit;
+      this.randomWardrobe = data.randomWardrobe;
+      this.randomOutfitKeys = Object.keys(this.randomOutfit);
+      this.randomWardrobeKeys = Object.keys(this.randomWardrobe);
+      this.loading = false;
     });
   }
 
@@ -85,27 +98,39 @@ export class SurveyComponent implements OnInit {
       return;
     }
 
+    const topString = 'Tops';
+    const botString = 'Bottoms';
+
     this.submission.createRating = this.wardrobeFormGroup.value.wardrobeRateCtrl;
     this.submission.randRating = this.outfitFormGroup.value.randomRateCtrl;
 
-    this.submission.randomOutfit = this.randomOutfit;
+    this.submission.randomOutfit = ({
+      Tops: this.randomOutfit.Tops[0].filename,
+      Bottoms: this.randomOutfit.Bottoms[0].filename
+    });
+    this.submission.createdOutfit = ({
+      Tops: this.randomWardrobe.Tops[this.outfitSelected[topString]].filename,
+      Bottoms: this.randomWardrobe.Bottoms[this.outfitSelected[botString]].filename
+    });
 
     this.submission.state = this.demographicFormGroup.value.stateCtrl;
     this.submission.sex = this.demographicFormGroup.value.sexCtrl;
 
     // Send the data
-    console.log(this.submission);
+    RequestsService.sendSurvey(this.submission).subscribe((data: any) => {
+      console.log(this.submission);
+    });
   }
 
   private selectedOutfit(): boolean {
-    return Object.keys(this.submission.createdOutfit).length === 2;
+    return Object.keys(this.outfitSelected).length === 2;
   }
 
   private selectArticle(index: number, type: string): void {
-    this.submission.createdOutfit[type] = this.randomWardrobe[type][index].src;
+    this.outfitSelected[type] = index;
   }
 
   private isSelected(index: number, type: string): boolean {
-    return this.submission.createdOutfit[type] === this.randomWardrobe[type][index].src;
+    return this.outfitSelected[type] === index;
   }
 }
