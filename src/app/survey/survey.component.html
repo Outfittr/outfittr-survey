@@ -48,7 +48,7 @@
 <mat-vertical-stepper *ngIf="!loading" [linear]="true" #stepper>
   <mat-step [stepControl]="demographicFormGroup">
     <form [formGroup]="demographicFormGroup">
-      <ng-template matStepLabel>Demographic Information</ng-template>
+      <ng-template matStepLabel>Your Demographic Information</ng-template>
       <mat-form-field>
         <mat-label>Sex</mat-label>
         <mat-select formControlName="sexCtrl">
