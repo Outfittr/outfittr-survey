@@ -59,9 +59,9 @@ export class SurveyComponent implements OnInit {
     state: -1,
     factors: {
       formality: Math.floor(Math.random() * 11),
-      weather: Math.floor(Math.random() * (this.weatherFactors.length + 1)),
-      temperature: Math.floor(Math.random() * (this.temperatureFactors.length + 1)),
-      season: Math.floor(Math.random() * (this.seasonFactors.length + 1))
+      weather: Math.floor(Math.random() * (this.weatherFactors.length)),
+      temperature: Math.floor(Math.random() * (this.temperatureFactors.length)),
+      season: Math.floor(Math.random() * (this.seasonFactors.length))
     },
     createdOutfit: {},
     createRating: -1,

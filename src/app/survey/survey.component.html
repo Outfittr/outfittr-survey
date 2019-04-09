@@ -9,7 +9,7 @@
 <div *ngIf="loading" class="outfittr-loading">
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>
-<mat-card *ngIf="!loading" class="outfittr-introduction">
+<mat-card *ngIf="!loading">
   <mat-card-header>
     <mat-card-title>Before You Begin</mat-card-title>
   </mat-card-header>
@@ -23,11 +23,26 @@
     </p>
     <p>
       Assume when building and rating the outfits in the following
-      sections that it's a <b><u>{{temperatureFactors[submission.factors.temperature]}}</u></b>,
-      <b><u>{{weatherFactors[submission.factors.weather]}}</u></b>,
-      <b><u>{{seasonFactors[submission.factors.season]}}</u></b> day and that the outfits are to be worn on an occasion
-      with a formality value of <b><u>{{submission.factors.formality}}</u></b>
+      sections that the environment is as follows:
     </p>
+      <table>
+        <tr>
+          <td>Event Formality:</td>
+          <td><b><u>{{submission.factors.formality}}</u></b></td>
+        </tr>
+        <tr>
+          <td>Temperature:</td>
+          <td><b><u>{{temperatureFactors[submission.factors.temperature]}}</u></b></td>
+        </tr>
+        <tr>
+          <td>Weather:</td>
+          <td><b><u>{{weatherFactors[submission.factors.weather]}}</u></b></td>
+        </tr>
+        <tr>
+          <td>Season:</td>
+          <td><b><u>{{seasonFactors[submission.factors.season]}}</u></b></td>
+        </tr>
+      </table>
   </mat-card-content>
 </mat-card>
 <mat-vertical-stepper *ngIf="!loading" [linear]="true" #stepper>
