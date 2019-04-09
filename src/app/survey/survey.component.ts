@@ -9,8 +9,8 @@ interface Garment {
 }
 
 interface Wardrobe {
-  Tops: Garment[];
-  Bottoms: Garment[];
+  Tops: String[];
+  Bottoms: String[];
 }
 
 interface EnvironmentFactor {
@@ -70,7 +70,8 @@ export class SurveyComponent implements OnInit {
   };
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private request: RequestsService
   ) { }
 
   ngOnInit() {
@@ -84,7 +85,7 @@ export class SurveyComponent implements OnInit {
     this.wardrobeFormGroup = this.formBuilder.group({
       wardrobeRateCtrl: ['', Validators.required]
     });
-    RequestsService.getSurvey().subscribe((data: any) => {
+    this.request.getSurvey({numberTops: 4, numberBottoms: 4}).subscribe((data: any) => {
       this.randomOutfit = data.randomOutfit;
       this.randomWardrobe = data.randomWardrobe;
       this.randomOutfitKeys = Object.keys(this.randomOutfit);
@@ -93,7 +94,7 @@ export class SurveyComponent implements OnInit {
     });
   }
 
-  private submit(): void {
+  private submit(stepper): void {
     if (!this.selectedOutfit()) {
       return;
     }
@@ -105,24 +106,25 @@ export class SurveyComponent implements OnInit {
     this.submission.randRating = this.outfitFormGroup.value.randomRateCtrl;
 
     this.submission.randomOutfit = ({
-      Tops: this.randomOutfit.Tops[0].filename,
-      Bottoms: this.randomOutfit.Bottoms[0].filename
+      Tops: this.randomOutfit.Tops[0],
+      Bottoms: this.randomOutfit.Bottoms[0]
     });
     this.submission.createdOutfit = ({
-      Tops: this.randomWardrobe.Tops[this.outfitSelected[topString]].filename,
-      Bottoms: this.randomWardrobe.Bottoms[this.outfitSelected[botString]].filename
+      Tops: this.randomWardrobe.Tops[this.outfitSelected[topString]],
+      Bottoms: this.randomWardrobe.Bottoms[this.outfitSelected[botString]]
     });
 
     this.submission.state = this.demographicFormGroup.value.stateCtrl;
     this.submission.sex = this.demographicFormGroup.value.sexCtrl;
 
     // Send the data
-    RequestsService.sendSurvey(this.submission).subscribe((data: any) => {
-      console.log(this.submission);
+    this.request.sendSurvey(this.submission).subscribe((data: any) => {
+      console.log(data);
+      location.reload();
     });
   }
 
-  private selectedOutfit(): boolean {
+  public selectedOutfit(): boolean {
     return Object.keys(this.outfitSelected).length === 2;
   }
 
