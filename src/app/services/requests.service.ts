@@ -12,10 +12,10 @@ export class RequestsService {
   ) { }
 
   public getSurvey(input): Observable<{}> {
-    return this.http.post('http://3.211.39.88:3000/survey', input);
+    return this.http.get(`http://3.211.39.88:3000/api/surveys/generate?tops=${input.tops}&bottoms=${input.bottoms}`);
   }
 
   public sendSurvey(input: any): Observable<{}> {
-    return this.http.post('http://3.211.39.88:3000/surveyin', input);
+    return this.http.post('http://3.211.39.88:3000/api/surveys', input);
   }
 }

@@ -4,13 +4,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { RequestsService } from '../services/requests.service';
 
 interface Garment {
-  src: string;
-  filename: string;
+  imageSource: string;
 }
 
 interface Wardrobe {
-  Tops: String[];
-  Bottoms: String[];
+  tops: Garment[];
+  bottoms: Garment[];
 }
 
 interface EnvironmentFactor {
@@ -57,16 +56,12 @@ export class SurveyComponent implements OnInit {
   public submission = {
     sex: -1,
     state: -1,
-    factors: {
-      formality: Math.floor(Math.random() * 11),
-      weather: Math.floor(Math.random() * (this.weatherFactors.length)),
-      temperature: Math.floor(Math.random() * (this.temperatureFactors.length)),
-      season: Math.floor(Math.random() * (this.seasonFactors.length))
-    },
+    formality: Math.floor(Math.random() * 11),
+    weather: Math.floor(Math.random() * (this.weatherFactors.length)),
+    temperature: Math.floor(Math.random() * (this.temperatureFactors.length)),
+    season: Math.floor(Math.random() * (this.seasonFactors.length)),
     createdOutfit: {},
-    createRating: -1,
-    randomOutfit: {},
-    randRating: -1
+    randomOutfit: {}
   };
 
   constructor(
@@ -85,9 +80,9 @@ export class SurveyComponent implements OnInit {
     this.wardrobeFormGroup = this.formBuilder.group({
       wardrobeRateCtrl: ['', Validators.required]
     });
-    this.request.getSurvey({numberTops: 4, numberBottoms: 4}).subscribe((data: any) => {
-      this.randomOutfit = data.randomOutfit;
-      this.randomWardrobe = data.randomWardrobe;
+    this.request.getSurvey({tops: 4, bottoms: 4}).subscribe((data: any) => {
+      this.randomOutfit = data.data.outfit;
+      this.randomWardrobe = data.data.wardrobe;
       this.randomOutfitKeys = Object.keys(this.randomOutfit);
       this.randomWardrobeKeys = Object.keys(this.randomWardrobe);
       this.loading = false;
@@ -99,19 +94,18 @@ export class SurveyComponent implements OnInit {
       return;
     }
 
-    const topString = 'Tops';
-    const botString = 'Bottoms';
-
-    this.submission.createRating = this.wardrobeFormGroup.value.wardrobeRateCtrl;
-    this.submission.randRating = this.outfitFormGroup.value.randomRateCtrl;
+    const topString = 'tops';
+    const botString = 'bottoms';
 
     this.submission.randomOutfit = ({
-      Tops: this.randomOutfit.Tops[0],
-      Bottoms: this.randomOutfit.Bottoms[0]
+      Tops: this.randomOutfit.tops[0],
+      Bottoms: this.randomOutfit.bottoms[0],
+      rating: this.outfitFormGroup.value.randomRateCtrl
     });
     this.submission.createdOutfit = ({
-      Tops: this.randomWardrobe.Tops[this.outfitSelected[topString]],
-      Bottoms: this.randomWardrobe.Bottoms[this.outfitSelected[botString]]
+      top: this.randomWardrobe.tops[this.outfitSelected[topString]],
+      bottom: this.randomWardrobe.bottoms[this.outfitSelected[botString]],
+      rating: this.wardrobeFormGroup.value.wardrobeRateCtrl
     });
 
     this.submission.state = this.demographicFormGroup.value.stateCtrl;

@@ -3,8 +3,8 @@
   <mat-card-header>
     <mat-card-title>Current Created Outfit</mat-card-title>
   </mat-card-header>
-  <img mat-card-image [src]="randomWardrobe.Tops[outfitSelected.Tops]" alt="Top garment">
-  <img mat-card-image [src]="randomWardrobe.Bottoms[outfitSelected.Bottoms]" alt="Bottom garment">
+  <img mat-card-image [src]="randomWardrobe.tops[outfitSelected.tops]" alt="Top garment">
+  <img mat-card-image [src]="randomWardrobe.bottoms[outfitSelected.bottoms]" alt="Bottom garment">
 </mat-card>
 <div *ngIf="loading" class="outfittr-loading">
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -28,19 +28,19 @@
       <table>
         <tr>
           <td>Event Formality:</td>
-          <td><b><u>{{submission.factors.formality}}</u></b></td>
+          <td><b><u>{{submission.formality}}</u></b></td>
         </tr>
         <tr>
           <td>Temperature:</td>
-          <td><b><u>{{temperatureFactors[submission.factors.temperature]}}</u></b></td>
+          <td><b><u>{{temperatureFactors[submission.temperature]}}</u></b></td>
         </tr>
         <tr>
           <td>Weather:</td>
-          <td><b><u>{{weatherFactors[submission.factors.weather]}}</u></b></td>
+          <td><b><u>{{weatherFactors[submission.weather]}}</u></b></td>
         </tr>
         <tr>
           <td>Season:</td>
-          <td><b><u>{{seasonFactors[submission.factors.season]}}</u></b></td>
+          <td><b><u>{{seasonFactors[submission.season]}}</u></b></td>
         </tr>
       </table>
   </mat-card-content>
@@ -71,7 +71,7 @@
       <ng-template matStepLabel>Observe a Random Outfit</ng-template>
       <div *ngFor="let key of randomOutfitKeys; index as index">
         <h1>{{key}}</h1>
-        <img [src]="randomOutfit[key][0]" alt="garment image"/>
+        <img [src]="randomOutfit[key][0].imageSource" alt="garment image"/>
       </div>
       <h2>Rate the Random Outfit</h2>
       <mat-radio-group formControlName="randomRateCtrl" required>
@@ -89,7 +89,7 @@
       <div *ngFor="let type of randomWardrobeKeys;">
         <h2>{{type}}</h2>
         <div>
-          <img *ngFor="let article of randomWardrobe[type]; index as index" [ngClass]="{'outfittr-garment-image': true, 'selected': isSelected(index, type)}" [src]="article" [id]="type + index" (click)="selectArticle(index, type)" alt="garment image"/>
+          <img *ngFor="let article of randomWardrobe[type]; index as index" [ngClass]="{'outfittr-garment-image': true, 'selected': isSelected(index, type)}" [src]="article.imageSource" [id]="type + index" (click)="selectArticle(index, type)" alt="garment image"/>
         </div>
       </div>
       <h2>Rate your Outfit</h2>
