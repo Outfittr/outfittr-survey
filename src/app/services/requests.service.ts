@@ -12,7 +12,7 @@ export class RequestsService {
   ) { }
 
   public getSurvey(input): Observable<{}> {
-    return this.http.get(`http://3.211.39.88:3000/api/surveys/generate?tops=${input.tops}&bottoms=${input.bottoms}`);
+    return this.http.get(`http://3.211.39.88:3000/api/surveys/generate?tops=${input.top}&bottoms=${input.bottom}`);
   }
 
   public sendSurvey(input: any): Observable<{}> {

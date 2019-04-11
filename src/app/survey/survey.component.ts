@@ -8,8 +8,8 @@ interface Garment {
 }
 
 interface Wardrobe {
-  tops: Garment[];
-  bottoms: Garment[];
+  top: Garment[];
+  bottom: Garment[];
 }
 
 interface EnvironmentFactor {
@@ -56,7 +56,7 @@ export class SurveyComponent implements OnInit {
   public submission = {
     sex: -1,
     state: -1,
-    formality: Math.floor(Math.random() * 11),
+    formality: Math.floor(Math.random() * 10) + 1,
     weather: Math.floor(Math.random() * (this.weatherFactors.length)),
     temperature: Math.floor(Math.random() * (this.temperatureFactors.length)),
     season: Math.floor(Math.random() * (this.seasonFactors.length)),
@@ -80,7 +80,7 @@ export class SurveyComponent implements OnInit {
     this.wardrobeFormGroup = this.formBuilder.group({
       wardrobeRateCtrl: ['', Validators.required]
     });
-    this.request.getSurvey({tops: 4, bottoms: 4}).subscribe((data: any) => {
+    this.request.getSurvey({top: 4, bottom: 4}).subscribe((data: any) => {
       this.randomOutfit = data.data.outfit;
       this.randomWardrobe = data.data.wardrobe;
       this.randomOutfitKeys = Object.keys(this.randomOutfit);
@@ -94,17 +94,17 @@ export class SurveyComponent implements OnInit {
       return;
     }
 
-    const topString = 'tops';
-    const botString = 'bottoms';
+    const topString = 'top';
+    const botString = 'bottom';
 
     this.submission.randomOutfit = ({
-      Tops: this.randomOutfit.tops[0],
-      Bottoms: this.randomOutfit.bottoms[0],
+      top: this.randomOutfit.top[0].imageSource,
+      bottom: this.randomOutfit.bottom[0].imageSource,
       rating: this.outfitFormGroup.value.randomRateCtrl
     });
     this.submission.createdOutfit = ({
-      top: this.randomWardrobe.tops[this.outfitSelected[topString]],
-      bottom: this.randomWardrobe.bottoms[this.outfitSelected[botString]],
+      top: this.randomWardrobe.top[this.outfitSelected[topString]].imageSource,
+      bottom: this.randomWardrobe.bottom[this.outfitSelected[botString]].imageSource,
       rating: this.wardrobeFormGroup.value.wardrobeRateCtrl
     });
 

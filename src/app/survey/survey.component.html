@@ -3,8 +3,8 @@
   <mat-card-header>
     <mat-card-title>Current Created Outfit</mat-card-title>
   </mat-card-header>
-  <img mat-card-image [src]="randomWardrobe.tops[outfitSelected.tops]" alt="Top garment">
-  <img mat-card-image [src]="randomWardrobe.bottoms[outfitSelected.bottoms]" alt="Bottom garment">
+  <img mat-card-image [src]="randomWardrobe.top[outfitSelected.top].imageSource" alt="Top garment">
+  <img mat-card-image [src]="randomWardrobe.bottom[outfitSelected.bottom].imageSource" alt="Bottom garment">
 </mat-card>
 <div *ngIf="loading" class="outfittr-loading">
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -18,8 +18,7 @@
       Before you begin the survey, please read the following information carefully
     </p>
     <p>
-      A "formality value" is a whole number between 1 and 10 indicative of the formality of an occasion (where 1 is
-      very informal and 10 is exceptionally formal).
+      A "formality value" is a whole number between 1 and 10 indicative of the formality of an occasion (eg. 1: Day around the house, 3: Casual date, 5: Business casual, 7: Black tie, and 10: White tie)
     </p>
     <p>
       Assume when building and rating the outfits in the following
