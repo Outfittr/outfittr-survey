@@ -85,6 +85,7 @@
   <mat-step [stepControl]="wardrobeFormGroup">
     <form [formGroup]="wardrobeFormGroup">
       <ng-template matStepLabel>Observe a Random Wardrobe</ng-template>
+      <h2>Create an outfit by clicking on one article per clothing type.</h2>
       <div *ngFor="let type of randomWardrobeKeys;">
         <h2>{{type}}</h2>
         <div>
